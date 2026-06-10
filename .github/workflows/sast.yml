@@ -1,0 +1,11 @@
+name: SAST Security Scan
+on: [push, pull_request]
+jobs:
+  semgrep:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run Semgrep
+        run: |
+          pip install semgrep
+          semgrep --config=p/owasp-top-ten --error app/

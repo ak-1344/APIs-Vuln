@@ -1,0 +1,10 @@
+rules:
+  - id: missing-auth-on-admin-route
+    patterns:
+      - pattern: |
+          @router.get("/admin/...")
+          def $FUNC(...):
+              ...
+    message: "Admin route has no authorization dependency — add Depends(require_admin)"
+    languages: [python]
+    severity: ERROR

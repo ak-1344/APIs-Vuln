@@ -1,0 +1,7 @@
+rules:
+  - id: sql-injection-fstring
+    patterns:
+      - pattern: db.execute(f"...")
+    message: "SQLi via f-string: use parameterized queries instead"
+    languages: [python]
+    severity: ERROR
