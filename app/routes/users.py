@@ -1,14 +1,16 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
+from sqlalchemy import text
 from app.database import get_db
 from app.models import User
 
 router = APIRouter()
 
-# VULN: SQLi — f-string query, no parameterization
+# VULN: SQLi — raw string concatenation, no parameterization
 @router.get("/users/search")
 def search_users(name: str, db: Session = Depends(get_db)):
-    result = db.execute(f"SELECT * FROM users WHERE email='{name}'")
+    raw_query = f"SELECT * FROM users WHERE email='{name}'"
+    result = db.execute(text(raw_query))  # text() wrapper but STILL vulnerable
     return {"users": [dict(row) for row in result.mappings()]}
 
 # VULN: returns all users with passwords — no auth
